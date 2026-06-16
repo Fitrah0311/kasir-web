@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
 import lombok.Data;
 import java.time.LocalDate;
 
@@ -15,8 +16,14 @@ public class Penjualan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    private String namaBarang;
-    private Integer jumlahJual;
-    private Double totalHarga;
-    private LocalDate tanggalTransaksi; // Penting buat filter mingguan / bulanan
+    private String nomorNota;
+    private String namaPembeli;
+    private String metodePembayaran;
+    
+    // Kita buat bertipe TEXT karena isinya kumpulan banyak barang (Format JSON String)
+    @Column(columnDefinition = "TEXT")
+    private String rincianBarang; 
+    
+    private Double totalHargaSemua; // Total akhir belanjaan
+    private LocalDate tanggalTransaksi; 
 }

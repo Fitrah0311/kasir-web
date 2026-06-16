@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,7 +22,6 @@ public class BarangController {
     @Autowired
     private PenjualanRepository penjualanRepository;
 
-    // 1. HALAMAN UTAMA: STOK BARANG
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("daftarBarang", barangRepository.findAll());
@@ -33,37 +34,55 @@ public class BarangController {
         return "redirect:/";
     }
 
-    // 2. HALAMAN BARU: HASIL PENJUALAN KASIR
     @GetMapping("/penjualan")
     public String halamanPenjualan(Model model) {
         List<Penjualan> semuaPenjualan = penjualanRepository.findAll();
-        
-        // Hitung Total Pendapatan Kumulatif
-        double totalPendapatan = semuaPenjualan.stream().mapToDouble(Penjualan::getTotalHarga).sum();
+        // Menghitung total omset dari kolom baru totalHargaSemua
+        double totalPendapatan = semuaPenjualan.stream().mapToDouble(Penjualan::getTotalHargaSemua).sum();
         
         model.addAttribute("daftarPenjualan", semuaPenjualan);
         model.addAttribute("totalPendapatan", totalPendapatan);
-        model.addAttribute("daftarBarang", barangRepository.findAll()); // Buat dropdown pilihan barang di kasir
+        model.addAttribute("daftarBarang", barangRepository.findAll());
         return "penjualan";
     }
 
-    // LOGIKA SAKTI KASIR: Simpan Penjualan + Potong Stok Otomatis (Nilai A+ di PBO)
     @PostMapping("/penjualan/simpan")
-    public String simpanPenjualan(@RequestParam Long barangId, @RequestParam Integer jumlahJual) {
-        Barang barang = barangRepository.findById(barangId).orElse(null);
-        
-        if (barang != null && barang.getStok() >= jumlahJual) {
-            // A. Kurangi stok barang
-            barang.setStok(barang.getStok() - jumlahJual);
-            barangRepository.save(barang);
+    public String simpanPenjualan(@RequestParam String namaPembeli,
+                                  @RequestParam String metodePembayaran,
+                                  @RequestParam Double totalHargaSemua,
+                                  @RequestParam String dataKeranjangJson) {
+        try {
+            // Logika PBO Tingkat Lanjut: Parsing JSON string data barang menggunakan Jackson ObjectMapper
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode rootNode = mapper.readTree(dataKeranjangJson);
 
-            // B. Catat ke tabel penjualan
+            // Loop tiap barang yang ada di dalam keranjang untuk potong stok di MySQL
+            for (JsonNode node : rootNode) {
+                Long barangId = node.get("id").asLong();
+                int qtyJual = node.get("qty").asInt();
+
+                Barang barang = barangRepository.findById(barangId).orElse(null);
+                if (barang != null && barang.getStok() >= qtyJual) {
+                    barang.setStok(barang.getStok() - qtyJual);
+                    barangRepository.save(barang); // Update potong stok berhasil
+                }
+            }
+
+            // Generate 1 Nomor Nota untuk semua barang tersebut
+            String nomorNota = "INV-" + java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd").format(LocalDate.now()) + "-" + (int)(Math.random() * 900 + 100);
+
+            // Simpan Nota Penjualan Utama ke Database
             Penjualan p = new Penjualan();
-            p.setNamaBarang(barang.getNamaBarang());
-            p.setJumlahJual(jumlahJual);
-            p.setTotalHarga(barang.getHargaJual() * jumlahJual);
-            p.setTanggalTransaksi(LocalDate.now()); // otomatis tanggal hari ini (2026)
+            p.setNomorNota(nomorNota);
+            p.setNamaPembeli(namaPembeli);
+            p.setMetodePembayaran(metodePembayaran);
+            p.setRincianBarang(dataKeranjangJson); // Menyimpan struktur JSON kumpulan barang sebagai teks
+            p.setTotalHargaSemua(totalHargaSemua);
+            p.setTanggalTransaksi(LocalDate.now());
             penjualanRepository.save(p);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return "redirect:/penjualan";
     }

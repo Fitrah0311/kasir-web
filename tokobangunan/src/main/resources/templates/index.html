@@ -4,39 +4,125 @@
     <meta charset="UTF-8">
     <title>Kasir - Stok Barang</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
     <style>
-        .sidebar { height: 100vh; position: fixed; top: 0; left: 0; width: 240px; background-color: #212529; padding-top: 20px; }
-        .sidebar a { padding: 12px 15px; text-decoration: none; font-size: 16px; color: #adbcca; display: block; }
-        .sidebar a:hover { background-color: #495057; color: white; }
-        .sidebar .active { background-color: #0d6efd; color: white; }
-        .main-content { margin-left: 260px; padding: 20px; }
+        :root {
+            --sidebar-bg: #1e293b; /* Slate dark premium */
+            --sidebar-hover: #334155;
+            --accent-color: #3b82f6; /* Bright Blue */
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        /* SIDEBAR STYLING */
+        .sidebar { 
+            height: 100vh; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 260px; 
+            background-color: var(--sidebar-bg); 
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        .sidebar-brand {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding-left: 12px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sidebar-menu { display: flex; flex-direction: column; gap: 8px; }
+        .sidebar a { 
+            padding: 14px 16px; 
+            text-decoration: none; 
+            font-size: 15px; 
+            font-weight: 500;
+            color: #94a3b8; 
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .sidebar a:hover { 
+            background-color: var(--sidebar-hover); 
+            color: white; 
+            padding-left: 20px;
+        }
+        .sidebar .active { 
+            background-color: var(--accent-color); 
+            color: white; 
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        .sidebar .active:hover { padding-left: 16px; background-color: var(--accent-color); }
+        
+        /* USER PROFILE BOTTOM SIDEBAR */
+        .sidebar-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background-color: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            color: white;
+        }
+        .user-avatar {
+            width: 40px; height: 40px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* MAIN CONTENT STYLING */
+        .main-content { margin-left: 280px; padding: 32px; }
+        .card { border: none; border-radius: 12px; }
+        .table { border-radius: 8px; overflow: hidden; }
     </style>
 </head>
 <body class="bg-light">
 
     <div class="sidebar">
-        <h4 class="text-white text-center mb-4 fw-bold">TB BAROKAH</h4>
-        <a href="/" class="active">📦 Stok Barang</a>
-        <a href="/penjualan">💰 Hasil Penjualan</a>
+        <div>
+            <div class="sidebar-brand">
+                <i class="fa-solid fa-trowel-bricks text-warning"></i>
+                <span>TB FAJAR BARU</span>
+            </div>
+            <div class="sidebar-menu">
+                <a href="/" class="active"><i class="fa-solid fa-boxes-stacked"></i> Stok Barang</a>
+                <a href="/penjualan"><i class="fa-solid fa-cash-register"></i> Hasil Penjualan</a>
+            </div>
+        </div>
     </div>
 
     <div class="main-content">
         <div class="row">
             <div class="col-md-4">
-                <div class="card shadow mb-4">
-                    <div class="card-header bg-success text-white">
-                        <h5 class="mb-0">Tambah Stok Barang</h5>
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-success text-white py-3">
+                        <h5 class="mb-0 fw-bold"><i class="fa-solid fa-circle-plus me-2"></i>Tambah Stok Barang</h5>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-4">
                         <form th:action="@{/tambah}" method="POST">
                             <div class="mb-3">
-                                <label class="form-label">Nama Barang</label>
-                                <input type="text" name="namaBarang" class="form-control" placeholder="Contoh: Semen Tiga Roda" required>
+                                <label class="form-label fw-semibold">Nama Barang</label>
+                                <input type="text" name="namaBarang" class="form-control py-2" placeholder="Contoh: Semen Tiga Roda" required>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Kategori</label>
-                                <select name="kategori" class="form-select" required>
+                                <label class="form-label fw-semibold">Kategori</label>
+                                <select name="kategori" class="form-select py-2" required>
                                     <option value="Material Dasar">Material Dasar</option>
                                     <option value="Cat">Cat</option>
                                     <option value="Besi">Besi</option>
@@ -44,48 +130,56 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Harga Jual</label>
-                                <input type="number" name="hargaJual" class="form-control" placeholder="Rp" required>
+                                <label class="form-label fw-semibold">Harga Jual</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input type="number" name="hargaJual" class="form-control py-2" placeholder="0" required>
+                                </div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Jumlah Stok</label>
-                                <input type="number" name="stok" class="form-control" placeholder="Pcs / Sak" required>
+                                <label class="form-label fw-semibold">Jumlah Stok</label>
+                                <input type="number" name="stok" class="form-control py-2" placeholder="Pcs / Sak" required>
                             </div>
-                            <button type="submit" class="btn btn-success w-100">Simpan Barang</button>
+                            <button type="submit" class="btn btn-success w-100 py-2 fw-bold shadow-sm mt-2">
+                                <i class="fa-solid fa-floppy-disk me-2"></i>Simpan Barang
+                            </button>
                         </form>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-8">
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">SISTEM MANAJEMEN STOK TOKO BANGUNAN</h5>
-                        <button onclick="exportToExcel()" class="btn btn-warning btn-sm fw-bold text-dark">📊 Cetak Laporan Excel</button>
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom">
+                        <h5 class="mb-0 fw-bold text-dark"><i class="fa-solid fa-layer-group text-primary me-2"></i>Daftar Inventaris Stok</h5>
+                        <button onclick="exportToExcel()" class="btn btn-outline-success btn-sm fw-bold px-3 py-2">
+                            <i class="fa-solid fa-file-excel me-2"></i>Cetak Laporan Excel
+                        </button>
                     </div>
-                    <div class="card-body">
-                        <table id="tabelBarang" class="table table-striped table-bordered align-middle">
-                            <thead class="table-dark text-center">
+                    <div class="card-body p-4">
+                        <table id="tabelBarang" class="table table-hover align-middle mb-0">
+                            <thead class="table-light text-secondary">
                                 <tr>
-                                    <th>No</th>
+                                    <th class="text-center" width="80">No</th>
                                     <th>Nama Barang</th>
                                     <th>Kategori</th>
-                                    <th>Harga Jual</th>
-                                    <th>Stok</th>
+                                    <th class="text-end">Harga Jual</th>
+                                    <th class="text-center" width="120">Stok</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:if="${#lists.isEmpty(daftarBarang)}">
-                                    <td colspan="5" class="text-center text-muted">Belum ada data barang. Silakan tambah di form sebelah kiri!</td>
+                                    <td colspan="5" class="text-center text-muted py-4">Belum ada data barang. Silakan tambah di form sebelah kiri!</td>
                                 </tr>
                                 <tr th:each="barang, iter : ${daftarBarang}">
-                                    <td class="text-center" th:text="${iter.count}">1</td>
-                                    <td th:text="${barang.namaBarang}">Nama</td>
-                                    <td th:text="${barang.kategori}">Kategori</td>
-                                    <td class="text-end" th:text="'Rp ' + ${#numbers.formatDecimal(barang.hargaJual, 0, 'POINT', 0, 'COMMA')}">Rp 0</td>
-                                    <td class="text-center fw-bold" 
-                                        th:classappend="${barang.stok < 5} ? 'table-danger text-danger' : 'text-success'"
-                                        th:text="${barang.stok}">0</td>
+                                    <td class="text-center fw-semibold text-muted" th:text="${iter.count}">1</td>
+                                    <td class="fw-bold text-dark" th:text="${barang.namaBarang}">Nama</td>
+                                    <td><span class="badge bg-secondary-subtle text-secondary px-2.5 py-1.5 rounded-pill fs-7" th:text="${barang.kategori}">Kategori</span></td>
+                                    <td class="text-end fw-semibold text-dark" th:text="'Rp ' + ${#numbers.formatDecimal(barang.hargaJual, 0, 'POINT', 0, 'COMMA')}">Rp 0</td>
+                                    <td class="text-center fw-bold" th:classappend="${barang.stok < 5} ? 'text-danger' : 'text-success'">
+                                        <span th:if="${barang.stok < 5}" class="badge bg-danger-subtle text-danger rounded px-2 w-100" th:text="${barang.stok} + ' (Kritis)'">0</span>
+                                        <span th:if="${barang.stok >= 5}" class="badge bg-success-subtle text-success rounded px-2 w-100" th:text="${barang.stok}">0</span>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
