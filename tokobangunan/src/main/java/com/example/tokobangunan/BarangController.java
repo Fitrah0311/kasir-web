@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,6 +32,20 @@ public class BarangController {
     @PostMapping("/tambah")
     public String tambahBarang(@ModelAttribute Barang barang) {
         barangRepository.save(barang);
+        return "redirect:/";
+    }
+
+    // 3. FITUR UPDATE: Menyimpan perubahan data barang yang diedit
+    @PostMapping("/edit")
+    public String editBarang(@ModelAttribute Barang barang) {
+        barangRepository.save(barang); // JPA otomatis ngedeteksi kalau ID sudah ada = UPDATE
+        return "redirect:/";
+    }
+
+    // 4. FITUR DELETE: Menghapus data barang berdasarkan ID
+    @GetMapping("/hapus/{id}")
+    public String hapusBarang(@PathVariable Long id) {
+        barangRepository.deleteById(id); // Perintah sakti JPA untuk DELETE FROM
         return "redirect:/";
     }
 

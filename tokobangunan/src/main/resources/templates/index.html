@@ -6,87 +6,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    
     <style>
-        :root {
-            --sidebar-bg: #1e293b; /* Slate dark premium */
-            --sidebar-hover: #334155;
-            --accent-color: #3b82f6; /* Bright Blue */
-        }
+        :root { --sidebar-bg: #1e293b; --sidebar-hover: #334155; --accent-color: #3b82f6; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        
-        /* SIDEBAR STYLING */
-        .sidebar { 
-            height: 100vh; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 260px; 
-            background-color: var(--sidebar-bg); 
-            padding: 24px 16px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
-            z-index: 100;
-        }
-        .sidebar-brand {
-            color: white;
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            padding-left: 12px;
-            margin-bottom: 32px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .sidebar { height: 100vh; position: fixed; top: 0; left: 0; width: 260px; background-color: var(--sidebar-bg); padding: 24px 16px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 4px 0 10px rgba(0,0,0,0.1); z-index: 100; }
+        .sidebar-brand { color: white; font-size: 20px; font-weight: 700; letter-spacing: 1px; padding-left: 12px; margin-bottom: 32px; display: flex; align-items: center; gap: 10px; }
         .sidebar-menu { display: flex; flex-direction: column; gap: 8px; }
-        .sidebar a { 
-            padding: 14px 16px; 
-            text-decoration: none; 
-            font-size: 15px; 
-            font-weight: 500;
-            color: #94a3b8; 
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-        .sidebar a:hover { 
-            background-color: var(--sidebar-hover); 
-            color: white; 
-            padding-left: 20px;
-        }
-        .sidebar .active { 
-            background-color: var(--accent-color); 
-            color: white; 
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-        .sidebar .active:hover { padding-left: 16px; background-color: var(--accent-color); }
-        
-        /* USER PROFILE BOTTOM SIDEBAR */
-        .sidebar-user {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            background-color: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            color: white;
-        }
-        .user-avatar {
-            width: 40px; height: 40px;
-            background-color: var(--accent-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        /* MAIN CONTENT STYLING */
+        .sidebar a { padding: 14px 16px; text-decoration: none; font-size: 15px; font-weight: 500; color: #94a3b8; display: flex; align-items: center; gap: 12px; border-radius: 8px; transition: all 0.3s ease; }
+        .sidebar a:hover { background-color: var(--sidebar-hover); color: white; padding-left: 20px; }
+        .sidebar .active { background-color: var(--accent-color); color: white; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
         .main-content { margin-left: 280px; padding: 32px; }
         .card { border: none; border-radius: 12px; }
         .table { border-radius: 8px; overflow: hidden; }
@@ -96,10 +24,7 @@
 
     <div class="sidebar">
         <div>
-            <div class="sidebar-brand">
-                <i class="fa-solid fa-trowel-bricks text-warning"></i>
-                <span>TB FAJAR BARU</span>
-            </div>
+            <div class="sidebar-brand"><i class="fa-solid fa-trowel-bricks text-warning"></i> <span>TB FAJAR BARU</span></div>
             <div class="sidebar-menu">
                 <a href="/" class="active"><i class="fa-solid fa-boxes-stacked"></i> Stok Barang</a>
                 <a href="/penjualan"><i class="fa-solid fa-cash-register"></i> Hasil Penjualan</a>
@@ -140,9 +65,7 @@
                                 <label class="form-label fw-semibold">Jumlah Stok</label>
                                 <input type="number" name="stok" class="form-control py-2" placeholder="Pcs / Sak" required>
                             </div>
-                            <button type="submit" class="btn btn-success w-100 py-2 fw-bold shadow-sm mt-2">
-                                <i class="fa-solid fa-floppy-disk me-2"></i>Simpan Barang
-                            </button>
+                            <button type="submit" class="btn btn-success w-100 py-2 fw-bold shadow-sm mt-2"><i class="fa-solid fa-floppy-disk me-2"></i>Simpan Barang</button>
                         </form>
                     </div>
                 </div>
@@ -152,33 +75,40 @@
                 <div class="card shadow-sm">
                     <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom">
                         <h5 class="mb-0 fw-bold text-dark"><i class="fa-solid fa-layer-group text-primary me-2"></i>Daftar Inventaris Stok</h5>
-                        <button onclick="exportToExcel()" class="btn btn-outline-success btn-sm fw-bold px-3 py-2">
-                            <i class="fa-solid fa-file-excel me-2"></i>Cetak Laporan Excel
-                        </button>
+                        <button onclick="exportToExcel()" class="btn btn-outline-success btn-sm fw-bold px-3 py-2"><i class="fa-solid fa-file-excel me-2"></i>Cetak Laporan Excel</button>
                     </div>
                     <div class="card-body p-4">
                         <table id="tabelBarang" class="table table-hover align-middle mb-0">
                             <thead class="table-light text-secondary">
                                 <tr>
-                                    <th class="text-center" width="80">No</th>
+                                    <th class="text-center" width="50">No</th>
                                     <th>Nama Barang</th>
                                     <th>Kategori</th>
                                     <th class="text-end">Harga Jual</th>
-                                    <th class="text-center" width="120">Stok</th>
+                                    <th class="text-center" width="100">Stok</th>
+                                    <th class="text-center" width="120">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:if="${#lists.isEmpty(daftarBarang)}">
-                                    <td colspan="5" class="text-center text-muted py-4">Belum ada data barang. Silakan tambah di form sebelah kiri!</td>
-                                </tr>
+                                <tr th:if="${#lists.isEmpty(daftarBarang)}"><td colspan="6" class="text-center text-muted py-4">Belum ada data barang. Silakan tambah di form sebelah kiri!</td></tr>
                                 <tr th:each="barang, iter : ${daftarBarang}">
                                     <td class="text-center fw-semibold text-muted" th:text="${iter.count}">1</td>
                                     <td class="fw-bold text-dark" th:text="${barang.namaBarang}">Nama</td>
-                                    <td><span class="badge bg-secondary-subtle text-secondary px-2.5 py-1.5 rounded-pill fs-7" th:text="${barang.kategori}">Kategori</span></td>
+                                    <td><span class="badge bg-secondary-subtle text-secondary px-2.5 py-1.5 rounded-pill" th:text="${barang.kategori}">Kategori</span></td>
                                     <td class="text-end fw-semibold text-dark" th:text="'Rp ' + ${#numbers.formatDecimal(barang.hargaJual, 0, 'POINT', 0, 'COMMA')}">Rp 0</td>
-                                    <td class="text-center fw-bold" th:classappend="${barang.stok < 5} ? 'text-danger' : 'text-success'">
+                                    <td class="text-center fw-bold">
                                         <span th:if="${barang.stok < 5}" class="badge bg-danger-subtle text-danger rounded px-2 w-100" th:text="${barang.stok} + ' (Kritis)'">0</span>
                                         <span th:if="${barang.stok >= 5}" class="badge bg-success-subtle text-success rounded px-2 w-100" th:text="${barang.stok}">0</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group gap-1">
+                                            <button class="btn btn-sm btn-warning text-dark fw-bold" th:onclick="bukaModalEdit([[${barang.id}]], [[${barang.namaBarang}]], [[${barang.kategori}]], [[${barang.hargaJual}]], [[${barang.stok}]])">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </button>
+                                            <a th:href="@{'/hapus/' + ${barang.id}}" class="btn btn-sm btn-danger fw-bold" onclick="return confirm('Yakin ingin menghapus barang ini?')">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -189,7 +119,65 @@
         </div>
     </div>
 
+    <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="border-radius: 15px;">
+                <div class="modal-header bg-warning text-dark" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-pen-to-square me-2"></i>Edit Data Barang</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{/edit}" method="POST">
+                    <div class="modal-body p-4">
+                        <input type="hidden" name="id" id="editId">
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Nama Barang</label>
+                            <input type="text" name="namaBarang" id="editNama" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Kategori</label>
+                            <select name="kategori" id="editKategori" class="form-select" required>
+                                <option value="Material Dasar">Material Dasar</option>
+                                <option value="Cat">Cat</option>
+                                <option value="Besi">Besi</option>
+                                <option value="Pipa">Pipa</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Harga Jual</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Rp</span>
+                                <input type="number" name="hargaJual" id="editHarga" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Jumlah Stok</label>
+                            <input type="number" name="stok" id="editStok" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 bg-light p-3" style="border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
+                        <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-warning fw-bold text-dark"><i class="fa-solid fa-floppy-disk me-2"></i>Simpan Perubahan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        var modalEdit = new bootstrap.Modal(document.getElementById('editModal'));
+
+        // Fungsi JavaScript untuk nyuapin data baris tabel ke dalam Form Modal Edit
+        function bukaModalEdit(id, nama, kategori, harga, stok) {
+            document.getElementById('editId').value = id;
+            document.getElementById('editNama').value = nama;
+            document.getElementById('editKategori').value = kategori;
+            document.getElementById('editHarga').value = harga;
+            document.getElementById('editStok').value = stok;
+            modalEdit.show();
+        }
+
         function exportToExcel() {
             var table = document.getElementById("tabelBarang");
             var wb = XLSX.utils.table_to_book(table, {sheet: "Laporan Stok Barang"});
