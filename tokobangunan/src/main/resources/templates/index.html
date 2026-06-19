@@ -75,7 +75,7 @@
                 <div class="card shadow-sm">
                     <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom">
                         <h5 class="mb-0 fw-bold text-dark"><i class="fa-solid fa-layer-group text-primary me-2"></i>Daftar Inventaris Stok</h5>
-                        <button onclick="exportToExcel()" class="btn btn-outline-success btn-sm fw-bold px-3 py-2"><i class="fa-solid fa-file-excel me-2"></i>Cetak Laporan Excel</button>
+                        <button onclick="exportToExcel()" class="btn btn-outline-success btn-sm fw-bold px-3 py-2"><i class="fa-solid fa-file-excel me-2"></i>Cetak Laporan Stok</button>
                     </div>
                     <div class="card-body p-4">
                         <table id="tabelBarang" class="table table-hover align-middle mb-0">
@@ -168,7 +168,6 @@
     <script>
         var modalEdit = new bootstrap.Modal(document.getElementById('editModal'));
 
-        // Fungsi JavaScript untuk nyuapin data baris tabel ke dalam Form Modal Edit
         function bukaModalEdit(id, nama, kategori, harga, stok) {
             document.getElementById('editId').value = id;
             document.getElementById('editNama').value = nama;
@@ -178,9 +177,18 @@
             modalEdit.show();
         }
 
+        // FIX LOGIC: Tabel, agar Kolom Aksi Terhapus di Excel
         function exportToExcel() {
-            var table = document.getElementById("tabelBarang");
-            var wb = XLSX.utils.table_to_book(table, {sheet: "Laporan Stok Barang"});
+            var tabelAsli = document.getElementById("tabelBarang");
+            var tabelKloning = tabelAsli.cloneNode(true);
+            var barisKloning = tabelKloning.querySelectorAll("tr");
+            barisKloning.forEach(row => {
+                if (row.cells.length >= 6) {
+                    row.deleteCell(5); 
+                }
+            });
+
+            var wb = XLSX.utils.table_to_book(tabelKloning, {sheet: "Laporan Stok Barang"});
             XLSX.writeFile(wb, "Laporan_Stok_Toko_Bangunan.xlsx");
         }
     </script>

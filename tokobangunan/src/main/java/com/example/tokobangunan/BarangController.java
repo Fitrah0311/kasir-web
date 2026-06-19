@@ -35,24 +35,21 @@ public class BarangController {
         return "redirect:/";
     }
 
-    // 3. FITUR UPDATE: Menyimpan perubahan data barang yang diedit
     @PostMapping("/edit")
     public String editBarang(@ModelAttribute Barang barang) {
-        barangRepository.save(barang); // JPA otomatis ngedeteksi kalau ID sudah ada = UPDATE
+        barangRepository.save(barang); 
         return "redirect:/";
     }
 
-    // 4. FITUR DELETE: Menghapus data barang berdasarkan ID
     @GetMapping("/hapus/{id}")
     public String hapusBarang(@PathVariable Long id) {
-        barangRepository.deleteById(id); // Perintah sakti JPA untuk DELETE FROM
+        barangRepository.deleteById(id);
         return "redirect:/";
     }
 
     @GetMapping("/penjualan")
     public String halamanPenjualan(Model model) {
         List<Penjualan> semuaPenjualan = penjualanRepository.findAll();
-        // Menghitung total omset dari kolom baru totalHargaSemua
         double totalPendapatan = semuaPenjualan.stream().mapToDouble(Penjualan::getTotalHargaSemua).sum();
         
         model.addAttribute("daftarPenjualan", semuaPenjualan);
@@ -61,13 +58,19 @@ public class BarangController {
         return "penjualan";
     }
 
+    // FITUR RESET: Menghapus semua riwayat transaksi untuk periode baru (Reset ke 0)
+    @PostMapping("/penjualan/reset")
+    public String resetPenjualan() {
+        penjualanRepository.deleteAll(); // Hapuskan semua isi tabel penjualan di MySQL
+        return "redirect:/penjualan";
+    }
+
     @PostMapping("/penjualan/simpan")
     public String simpanPenjualan(@RequestParam String namaPembeli,
                                   @RequestParam String metodePembayaran,
                                   @RequestParam Double totalHargaSemua,
                                   @RequestParam String dataKeranjangJson) {
         try {
-            // Logika PBO Tingkat Lanjut: Parsing JSON string data barang menggunakan Jackson ObjectMapper
             ObjectMapper mapper = new ObjectMapper();
             JsonNode rootNode = mapper.readTree(dataKeranjangJson);
 
@@ -91,7 +94,7 @@ public class BarangController {
             p.setNomorNota(nomorNota);
             p.setNamaPembeli(namaPembeli);
             p.setMetodePembayaran(metodePembayaran);
-            p.setRincianBarang(dataKeranjangJson); // Menyimpan struktur JSON kumpulan barang sebagai teks
+            p.setRincianBarang(dataKeranjangJson); 
             p.setTotalHargaSemua(totalHargaSemua);
             p.setTanggalTransaksi(LocalDate.now());
             penjualanRepository.save(p);
