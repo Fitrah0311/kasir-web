@@ -49,9 +49,6 @@
                 margin-bottom: 0 !important;
                 font-weight: bold !important;
             }
-            #areaCetakStruk .text-success {
-                color: #000 !important; 
-            }
             .btn-close, .modal-footer, .btn { display: none !important; }
         }
     </style>
@@ -398,6 +395,16 @@
                     document.getElementById('formReset').submit();
                 }
             }, 1000);
+        }
+
+        // FORCE LOGOUT PAS CLOSE TAB
+        if (!sessionStorage.getItem("tab_session_aktif")) {
+            sessionStorage.setItem("tab_session_aktif", "true");
+            if (performance.navigation.type === performance.navigation.TYPE_NAVIGATE) {
+                fetch('/logout', { method: 'POST' }).then(() => {
+                    window.location.href = '/login?logout';
+                });
+            }
         }
     </script>
 </body>

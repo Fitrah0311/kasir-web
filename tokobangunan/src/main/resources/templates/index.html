@@ -191,6 +191,17 @@
             var wb = XLSX.utils.table_to_book(tabelKloning, {sheet: "Laporan Stok Barang"});
             XLSX.writeFile(wb, "Laporan_Stok_Toko_Bangunan.xlsx");
         }
+
+        // FORCE LOGOUT PAS CLOSE TAB
+        if (!sessionStorage.getItem("tab_session_aktif")) {
+            // Jika masuk ke halaman tapi tanda sesi tab tidak ada, paksa tendang ke logout sistem
+            sessionStorage.setItem("tab_session_aktif", "true");
+            if (performance.navigation.type === performance.navigation.TYPE_NAVIGATE) {
+                fetch('/logout', { method: 'POST' }).then(() => {
+                    window.location.href = '/login?logout';
+                });
+            }
+        }
     </script>
 </body>
 </html>

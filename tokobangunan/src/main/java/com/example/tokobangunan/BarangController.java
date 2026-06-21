@@ -58,6 +58,11 @@ public class BarangController {
         return "penjualan";
     }
 
+    @GetMapping("/login")
+    public String halamanLogin() {
+        return "login";
+    }
+
     // FITUR RESET: Menghapus semua riwayat transaksi untuk periode baru (Reset ke 0)
     @PostMapping("/penjualan/reset")
     public String resetPenjualan() {
