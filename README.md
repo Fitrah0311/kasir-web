@@ -59,10 +59,10 @@ cd [kasir-web]
    <img width="1920" height="1015" alt="Screenshot 2026-06-24 052206" src="https://github.com/user-attachments/assets/f08740b6-5ee4-4883-a4bd-9652918139c1" />
    
    ### Tampilan Utama Web Kasir (Inventaris CRUD & Stok)
-   <img width="1920" height="1019" alt="Screenshot 2026-06-23 092452" src="https://github.com/user-attachments/assets/e551d4d7-1e41-42a0-b889-c6c137de9135" />
+   <img width="1920" height="1017" alt="image" src="https://github.com/user-attachments/assets/e1cae7cf-b92c-4e25-966f-ece1f18800f9" />
 
    ### Pengelolaan Data Cetak Laporan
-   <img width="1920" height="1017" alt="Screenshot 2026-06-23 092715" src="https://github.com/user-attachments/assets/385ae1c4-fc15-4142-a362-bf5dc2be9082" />
+   <img width="1920" height="911" alt="image" src="https://github.com/user-attachments/assets/609eb243-5ffc-4fd9-9dfd-2c56b2cfe5bf" />
 
   ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
    
